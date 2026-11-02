@@ -1,0 +1,29 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Extract project
+        run: |
+          unzip PRO_HDR_AI_STUDIO_Mobile_Build_Ready.zip -d project
+
+      - name: Build APK
+        run: |
+          cd project
+          gradle assembleDebug
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PRO-HDR-AI-STUDIO-APK
+          path: project/app/build/outputs/apk/debug/app-debug.apk
